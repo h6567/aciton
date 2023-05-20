@@ -1,13 +1,23 @@
-name: learn-github-actions
-run-name: ${{ github.actor }} is learning GitHub Actions
-on: [push]
+name: Send email on push
+
+on:
+  push:
+    branches:
+      - main
+
 jobs:
-  check-bats-version:
+  send_email:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - name: Send email
+        uses: dawidd6/action-send-mail@v2.5.0
         with:
-          node-version: '14'
-      - run: npm install -g bats
-      - run: bats -v
+          server_address: smtp.gmail.com
+          server_port: 587
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: "Email Notification: New changes pushed to the repository"
+          to: h266094@gmail.com
+          from: h266094@outlook.com
+          body: |
+            Changes have been pushed to the repository, please review.
