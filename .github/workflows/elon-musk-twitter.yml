@@ -1,0 +1,31 @@
+name: Elon Musk Twitter
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+jobs:
+  collect-links:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v2
+      - name: Install Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - name: Install dependencies
+        run: |
+          pip install beautifulsoup4
+          pip install requests
+      - name: Get links
+        run: |
+          python myscript.py && cat links.txt
+      - name: Send links
+        uses: dawidd6/action-send-mail@master
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: "Elon Musk Twitter Links"
+          body: "Links to Elon Musk's latest tweets: \n\n$(cat links.txt)"
+          to: h266094@outlook.com
