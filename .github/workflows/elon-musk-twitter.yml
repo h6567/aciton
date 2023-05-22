@@ -1,7 +1,9 @@
 name: Elon Musk Twitter
+
 on:
-  schedule:
-    - cron: '*/5 * * * *'
+    push:
+      branches:
+        - main
 jobs:
   collect-links:
     runs-on: ubuntu-latest
